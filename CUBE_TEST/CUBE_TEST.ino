@@ -76,12 +76,7 @@ void loop() {
     digitalWrite(anodeSelectPins[i], (layer & (1 << i)) ? HIGH : LOW);
   }
 
-  //SingleLayerManipulation(datR, datG, datB);
-  digitalWrite(dataPinG,(datG & ((uint64_t)1 << GLayout[7])));
-  sprintBin(datG);
-
-  digitalWrite(colorClkPin, HIGH);
-   digitalWrite(colorClkPin, LOW);
+  SingleLayerManipulation(datR, datG, datB);
  
 
   digitalWrite(colorEnable, LOW);
@@ -89,8 +84,8 @@ void loop() {
   digitalWrite(colorLatchPin, LOW);
   delay(1000);
   digitalWrite(colorLatchPin, HIGH);
-//
- datG = datG << 1;
+
+  datG = datG << 1;
   if (datG == 0) {
     datG = 1;
   }
@@ -114,15 +109,17 @@ void SingleLayerManipulation(uint64_t R, uint64_t G, uint64_t B){
     //Serial.println((uint32_t)((1 << GLayout[i]) & 0xFFFFFFFF00000000),HEX);
     
     //digitalWrite(dataPinR, R & 1 << RBLayout[i]);
-    //digitalWrite(dataPinG, (G & ((uint64_t)1 << GLayout[i])));
-    //digitalWrite(dataPinG, (G & ((uint64_t)1 << GLayout[i])));
+    digitalWrite(dataPinG, (G & ((uint64_t)1 << GLayout[i])));
+    Serial.print((G & ((uint64_t)1 << GLayout[i])) ? "1" : "0");
+    
     //digitalWrite(dataPinB, B & 1 << RBLayout[i]);
     
     digitalWrite(colorClkPin, HIGH);
     digitalWrite(colorClkPin, LOW);
     
-    
+    sprintBin(((uint64_t)1 << GLayout[i]));
   }
+  Serial.println();
 }
 
 void sprintBin(uint64_t b) {
