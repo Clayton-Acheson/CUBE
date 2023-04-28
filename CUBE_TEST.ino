@@ -110,6 +110,7 @@ void SingleLayerManipulation(uint64_t R, uint64_t G, uint64_t B){
     
     //digitalWrite(dataPinR, R & 1 << RBLayout[i]);
     digitalWrite(dataPinG, (G & ((uint64_t)1 << GLayout[i])));
+    Serial.print((G & ((uint64_t)1 << GLayout[i])) ? "1" : "0");
     
     //digitalWrite(dataPinB, B & 1 << RBLayout[i]);
     
@@ -118,6 +119,7 @@ void SingleLayerManipulation(uint64_t R, uint64_t G, uint64_t B){
     
     sprintBin(((uint64_t)1 << GLayout[i]));
   }
+  Serial.println();
 }
 
 void sprintBin(uint64_t b) {
