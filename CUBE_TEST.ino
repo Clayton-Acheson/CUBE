@@ -85,10 +85,10 @@ void loop() {
   delay(1000);
   digitalWrite(colorLatchPin, HIGH);
 
-// datG = datG << 1;
-// if (datG == 0) {
-//   datG = 1;
-//}
+  datG = datG << 1;
+  if (datG == 0) {
+    datG = 1;
+  }
  // dat2 = dat2 << 1;
  // if (dat2 == 0) {
   //  dat2 = 0x0001;
@@ -116,6 +116,13 @@ void SingleLayerManipulation(uint64_t R, uint64_t G, uint64_t B){
     digitalWrite(colorClkPin, HIGH);
     digitalWrite(colorClkPin, LOW);
     
-    
+    sprintBin(((uint64_t)1 << GLayout[i]));
   }
+}
+
+void sprintBin(uint64_t b) {
+  for (int i = 0; i < 64; i++) {
+    Serial.print((b & ((uint64_t)1 << i)) ? "1" : "0");
+  }
+  Serial.println();
 }
