@@ -6,10 +6,10 @@
 #define dataPinG 4
 #define anodeEnablePin 8
 int anodeSelectPins[] = {13, 12, 11};
-int layer = 7;
+int layer = 0;
 uint64_t datR = 1;
-uint64_t datG = 1;
-uint64_t datB = 1;
+uint64_t datG = 2;
+uint64_t datB = 4;
 uint8_t GLayout[] = {
   0, 1, 2, 3, 4, 5, 6, 7,
   15, 14, 13, 12, 11, 10, 9, 8,
@@ -79,24 +79,24 @@ void loop() {
   for (int i = 0; i < 3; i++) {
     digitalWrite(anodeSelectPins[i], (layer & (1 << i)) ? HIGH : LOW);
   }
-  SingleLayerManipulation(datG, datG, datG);
+  SingleLayerManipulation(datR, datG, datB);
   digitalWrite(colorEnable, LOW);
   digitalWrite(colorLatchPin, LOW);
-    delay(1000);
+    delay(50);
   digitalWrite(colorLatchPin, HIGH);
   datG = datG << 1;
   if (datG == 0) {
     datG = 1;
   }
-  // dat2 = dat2 << 1;
-  // if (dat2 == 0) {
-  //  dat2 = 0x0001;
-  // }
-  // dat3 = dat3 << 1;
-  // if (dat3 == 0) {
-  //   dat3 = 0x0001;
-  //   layer = (layer + 1) % 8;
-  // }
+   datR = datR << 1;
+   if (datR == 0) {
+    datR = 0x0001;
+   }
+   datB = datB << 1;
+   if (datB == 0) {
+     datB = 0x0001;
+     layer = (layer + 1) % 8;
+   }
 //  while (Serial.available() == 0);
 //  while (Serial.available() != 0) Serial.read();
 }
@@ -110,16 +110,17 @@ void SingleLayerManipulation(uint64_t R, uint64_t G, uint64_t B) {
     //Serial.println((uint32_t)((1 << GLayout[i]) & 0xFFFFFFFF00000000),HEX);
     //digitalWrite(dataPinR, R & 1 << RBLayout[i]);
 //    digitalWrite(dataPinR, (R & ((uint64_t)1 << (i))) ? HIGH : LOW);
+    R = 0xFFFFFFFFFFFFFFFF;
     digitalWrite(dataPinG, (G & ((uint64_t)1 << GLayout[63 - i])) ? HIGH : LOW);
     digitalWrite(dataPinR, (R & ((uint64_t)1 << RLayout[63 - i])) ? HIGH : LOW);
-   // digitalWrite(dataPinB, (B & ((uint64_t)1 << BLayout[63 - i])) ? HIGH : LOW);
+    //digitalWrite(dataPinB, (B & ((uint64_t)1 << BLayout[63 - i])) ? HIGH : LOW);
     //    Serial.print((R & ((uint64_t)1 << RBLayout[i])) ? "1" : "0");
     //digitalWrite(dataPinB, B & 1 << RBLayout[i]);
     digitalWrite(colorClkPin, HIGH);
     digitalWrite(colorClkPin, LOW);
     //    sprintBin(((uint64_t)1 << GLayout[i]));
   }
-  Serial.println();
+  //Serial.println();
 }
 void sprintBin(uint64_t b) {
   for (int i = 0; i < 64; i++) {
