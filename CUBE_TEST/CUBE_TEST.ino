@@ -11,8 +11,8 @@ int anodeSelectPins[] = {13, 12, 11};
 
 int layer = 7;
 uint64_t datR = 1;
-uint64_t datG = 1;
-uint64_t datB = 1;
+uint64_t datG = 2;
+uint64_t datB = 4;
 
 
 
@@ -72,6 +72,18 @@ void setup() {
     pinMode(anodeSelectPins[i], OUTPUT);
   }
 
+  datG = 0;
+  datR = 0;
+  datB = 0;
+  for (int i = 0; i < 8; i++) {
+    datG <<= 8;
+    datG |= 0;
+    datR <<= 8;
+    datR |= 0;
+    datB <<= 8;
+    datB |= 0xFF;
+  }
+
   // fix thing
   for (uint8_t i = 0; i < 64; i++) {
     RLayout[RLayout_int[i]] = i;
@@ -99,44 +111,46 @@ void loop() {
     digitalWrite(anodeSelectPins[i], (layer & (1 << i)) ? HIGH : LOW);
   }
 
-  SingleLayerManipulation(datG, datG, datG);
+  SingleLayerManipulation(datR, datG, datB);
 
 
   digitalWrite(colorEnable, LOW);
 
   digitalWrite(colorLatchPin, LOW);
-  //  delay(1000);
+  delay(10);
   digitalWrite(colorLatchPin, HIGH);
 
-  datG = datG << 1;
-  if (datG == 0) {
-    datG = 1;
-  }
-  // dat2 = dat2 << 1;
-  // if (dat2 == 0) {
-  //  dat2 = 0x0001;
-  // }
-  // dat3 = dat3 << 1;
-  // if (dat3 == 0) {
-  //   dat3 = 0x0001;
-  //   layer = (layer + 1) % 8;
-  // }
-//  while (Serial.available() == 0);
-//  while (Serial.available() != 0) Serial.read();
+  layer = (layer + 1) % 8;
+
+//  datG = datG << 1;
+//  if (datG == 0) {
+//    datG = 1;
+//  }
+//  datR = datR << 1;
+//  if (datR == 0) {
+//    datR = 0x0001;
+//  }
+//  datB = datB << 1;
+//  if (datB == 0) {
+//    datB = 0x0001;
+//    layer = (layer + 1) % 8;
+//  }
+  //  while (Serial.available() == 0);
+  //  while (Serial.available() != 0) Serial.read();
 }
 
 //Function to output green to the cube
 void SingleLayerManipulation(uint64_t R, uint64_t G, uint64_t B) {
-  
-//  sprintBin((uint64_t)1 << RBLayout[0]);
-//  sprintBin(R);
+
+  //  sprintBin((uint64_t)1 << RBLayout[0]);
+  //  sprintBin(R);
   for (int i = 0; i < 64; i++) {
 
     //Serial.print((uint32_t)((1 << GLayout[i])),HEX);
     //Serial.println((uint32_t)((1 << GLayout[i]) & 0xFFFFFFFF00000000),HEX);
 
     //digitalWrite(dataPinR, R & 1 << RBLayout[i]);
-//    digitalWrite(dataPinR, (R & ((uint64_t)1 << (i))) ? HIGH : LOW);
+    //    digitalWrite(dataPinR, (R & ((uint64_t)1 << (i))) ? HIGH : LOW);
     digitalWrite(dataPinG, (G & ((uint64_t)1 << GLayout[63 - i])) ? HIGH : LOW);
     digitalWrite(dataPinR, (R & ((uint64_t)1 << RLayout[63 - i])) ? HIGH : LOW);
     digitalWrite(dataPinB, (B & ((uint64_t)1 << BLayout[63 - i])) ? HIGH : LOW);
