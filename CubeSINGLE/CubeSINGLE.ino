@@ -90,7 +90,7 @@ void loop() {
   }
    datR = datR << 1;
    if (datR == 0) {
-    datR = 0x0001;
+    datR = 0xFFFFFFFFFFFFFFFF;
    }
    datB = datB << 1;
    if (datB == 0) {
@@ -110,10 +110,10 @@ void SingleLayerManipulation(uint64_t R, uint64_t G, uint64_t B) {
     //Serial.println((uint32_t)((1 << GLayout[i]) & 0xFFFFFFFF00000000),HEX);
     //digitalWrite(dataPinR, R & 1 << RBLayout[i]);
 //    digitalWrite(dataPinR, (R & ((uint64_t)1 << (i))) ? HIGH : LOW);
-    R = 0xFFFFFFFFFFFFFFFF;
+    
     digitalWrite(dataPinG, (G & ((uint64_t)1 << GLayout[63 - i])) ? HIGH : LOW);
     digitalWrite(dataPinR, (R & ((uint64_t)1 << RLayout[63 - i])) ? HIGH : LOW);
-    //digitalWrite(dataPinB, (B & ((uint64_t)1 << BLayout[63 - i])) ? HIGH : LOW);
+    digitalWrite(dataPinB, (B & ((uint64_t)1 << BLayout[63 - i])) ? HIGH : LOW);
     //    Serial.print((R & ((uint64_t)1 << RBLayout[i])) ? "1" : "0");
     //digitalWrite(dataPinB, B & 1 << RBLayout[i]);
     digitalWrite(colorClkPin, HIGH);

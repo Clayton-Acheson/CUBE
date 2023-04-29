@@ -10,7 +10,7 @@
 const PROGMEM int anodeSelectPins[] = {13, 12, 11};
 
 int layer = 7;
-uint64_t datR = 1;
+uint64_t datR = 0xFFFFFFFFFFFFFFFF;
 uint64_t datG = 2;
 uint64_t datB = 4;
 
@@ -109,7 +109,9 @@ void loop() {
 
   digitalWrite(colorEnable, HIGH);
 
- 
+ for (int i = 0; i < 3; i++) {
+    digitalWrite(anodeSelectPins[i], (layer & (1 << i)) ? HIGH : LOW);
+  }
 
   SingleLayerManipulation(datR, datG, datB);
 
@@ -120,19 +122,19 @@ void loop() {
    delay(1000);
   digitalWrite(colorLatchPin, HIGH);
 
-  datR = datR << 1;
-  if (datR == 0) {
-    datR = 1;
+  datG = datG << 1;
+  if (datG == 0) {
+    datG = 1;
   }
-   datG = datG << 1;
-   if (datG == 0) {
-    datG = 0x0001;
+   datR = datR << 1;
+   if (datR == 0) {
+    datR = 0x0001;
    }
    datB = datB << 1;
    if (datB == 0) {
      datB = 0x0001;
    layer = (layer + 1) % 8;
-   }
+  }
 //  while (Serial.available() == 0);
 //  while (Serial.available() != 0) Serial.read();
 }
