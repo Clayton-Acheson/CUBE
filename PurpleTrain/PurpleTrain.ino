@@ -8,8 +8,8 @@
 int anodeSelectPins[] = {13, 12, 11};
 int layer = 0;
 uint64_t datR = 0;
-uint64_t datG = 7;
-uint64_t datB = 7;
+uint64_t datG = 0;
+uint64_t datB = 15;
 uint8_t GLayout[] = {
   0, 1, 2, 3, 4, 5, 6, 7,
   15, 14, 13, 12, 11, 10, 9, 8,
@@ -84,17 +84,17 @@ void loop() {
   digitalWrite(colorLatchPin, LOW);
     delay(50);
   digitalWrite(colorLatchPin, HIGH);
-  datG = datG << 2;
+  datG = datG << 1;
   if (datG == 0) {
-    datG = 7;
+    datG = 0;
   }
    datR = datR << 1;
    if (datR == 0) {
-    datR = 0xFFFFFFFFFFFFFFFF;
+    datR = 0x0;
    }
-   datB = datB << 2;
+   datB = datB << 1;
    if (datB == 0) {
-     datB = 0x0007;
+     datR = 0xFFFFFFFFFFFFFFFF;
      layer = (layer + 1) % 8;
    }
 //  while (Serial.available() == 0);
@@ -111,7 +111,7 @@ void SingleLayerManipulation(uint64_t R, uint64_t G, uint64_t B) {
     //digitalWrite(dataPinR, R & 1 << RBLayout[i]);
 //    digitalWrite(dataPinR, (R & ((uint64_t)1 << (i))) ? HIGH : LOW);
     
-    digitalWrite(dataPinG, (G & ((uint64_t)1 << GLayout[i])) ? HIGH : LOW);
+    digitalWrite(dataPinB, (G & ((uint64_t)1 << GLayout[i])) ? HIGH : LOW);
     digitalWrite(dataPinR, (R & ((uint64_t)1 << RLayout[63 - i])) ? HIGH : LOW);
     digitalWrite(dataPinB, (B & ((uint64_t)1 << BLayout[63 - i])) ? HIGH : LOW);
     //    Serial.print((R & ((uint64_t)1 << RBLayout[i])) ? "1" : "0");
