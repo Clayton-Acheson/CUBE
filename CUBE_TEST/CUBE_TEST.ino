@@ -109,11 +109,9 @@ void loop() {
 
   digitalWrite(colorEnable, HIGH);
 
-  Checkerboard();
+ 
 
-  DisplayArray();
-
-  //SingleLayerManipulation(datG, datG, datG);
+  SingleLayerManipulation(datR, datG, datB);
 
 
   digitalWrite(colorEnable, LOW);
@@ -122,19 +120,19 @@ void loop() {
    delay(1000);
   digitalWrite(colorLatchPin, HIGH);
 
-  datG = datG << 1;
-  if (datG == 0) {
-    datG = 1;
+  datR = datR << 1;
+  if (datR == 0) {
+    datR = 1;
   }
-  // dat2 = dat2 << 1;
-  // if (dat2 == 0) {
-  //  dat2 = 0x0001;
-  // }
-  // dat3 = dat3 << 1;
-  // if (dat3 == 0) {
-  //   dat3 = 0x0001;
+   datG = datG << 1;
+   if (datG == 0) {
+    datG = 0x0001;
+   }
+   datB = datB << 1;
+   if (datB == 0) {
+     datB = 0x0001;
    layer = (layer + 1) % 8;
-  // }
+   }
 //  while (Serial.available() == 0);
 //  while (Serial.available() != 0) Serial.read();
 }
